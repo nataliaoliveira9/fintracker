@@ -6,8 +6,7 @@ from twelvedata import TDClient
 
 td = TDClient(apikey=settings.TWELVEDATA_API_KEY)
 
-class StockSearchView(APIView):
-    # search for stock symbols
+class StockSearchView(APIView): # search for stock symbols
     def get(self, request):
         query = request.query_params.get("q")
         if not query:
@@ -21,8 +20,7 @@ class StockSearchView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
 
 
-class StockCandlestickView(APIView):
-    # Return OHLCV candlestick data for a symbol.
+class StockCandlestickView(APIView): # get OHLCV (open, high, low, close, volume) candlestick data for a symbol
     def get(self, request):
         symbol = request.query_params.get("symbol")
         interval = request.query_params.get("interval", "1day")
@@ -42,8 +40,7 @@ class StockCandlestickView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_502_BAD_GATEWAY)
 
 
-class StockQuoteView(APIView):
-    # Return current quote for a symbol.
+class StockQuoteView(APIView): # get current quote for a symbol
     def get(self, request):
         symbol = request.query_params.get("symbol")
         if not symbol:

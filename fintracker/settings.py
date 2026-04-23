@@ -29,11 +29,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'stocks','currency','rest_framework','corsheaders',
+    'stocks', # my stocks app
+    'currency', # my currency app
+    'rest_framework', # api framework
+    'corsheaders', # cors allows cross origin requests, so the frontend can talk to the backend
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # cors - must be before security middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -43,7 +46,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'DjangoFinance.urls'
+ROOT_URLCONF = 'fintracker.urls'
 
 TEMPLATES = [
     {
@@ -60,7 +63,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'DjangoFinance.wsgi.application'
+WSGI_APPLICATION = 'fintracker.wsgi.application'
 
 
 # Database
@@ -109,6 +112,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# my API keys - stored in .env file
 APPDATA_API_KEY    = os.getenv("APPDATA_API_KEY", "YOUR_APPDATA_KEY")
 TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY", "YOUR_TWELVEDATA_KEY")
 
@@ -120,7 +125,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-# REST - This protects your API keys from being exhausted by bot traffic or runaway requests.
+# REST - protects my API keys from being exhausted by bot traffic or runaway requests
 REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": [
     "rest_framework.throttling.AnonRateThrottle",
@@ -128,4 +133,12 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "60/minute",
     },
+}
+
+# Cache - use the database for persistent caching of API results (saves API quota)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'api_cache_table',
+    }
 }

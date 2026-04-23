@@ -109,14 +109,14 @@ const StockViewer: React.FC = () => {
     const data = res.data;
 
     // 1. Twelve Data specific error check (even with 200 OK)
-    if (data.status === 'error' || !data.values) {
+    if (!Array.isArray(data) || data.length === 0) {
       setError(data.message || 'No data found for this symbol.');
       return;
     }
 
     // 2. Map and Parse (Convert Strings to Numbers & Timestamps)
     // We reverse() because Lightweight Charts needs oldest -> newest
-    const bars: CandlestickBar[] = [...data.values].reverse();
+    const bars: CandlestickBar[] = [...data].reverse();
 
     const candles = bars.map(b => {
       // Use Unix timestamp (seconds) to avoid duplicate "Date" errors on intraday charts
@@ -186,7 +186,7 @@ const StockViewer: React.FC = () => {
       setSearching(true);
       try {
         const res = await stockApi.search(query);
-        const hits: StockSearchResult[] = res.data.data || [];
+        const hits: StockSearchResult[] = Array.isArray(res.data) ? res.data : [];
         setSearchResults(hits.slice(0, 8));
         setShowDropdown(true);
       } catch {

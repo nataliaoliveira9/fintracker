@@ -27,8 +27,8 @@ const CurrencyConverter: React.FC = () => {
     currencyApi.list()
       .then(res => {
         const data = res.data;
-        if (data.currencies) {
-          const list: CurrencyOption[] = Object.entries(data.currencies).map(
+        if (data.symbols) {
+          const list: CurrencyOption[] = Object.entries(data.symbols).map(
             ([code, name]) => ({ code, name: name as string })
           );
           list.sort((a, b) => {
@@ -42,7 +42,10 @@ const CurrencyConverter: React.FC = () => {
           setCurrencies(list);
         }
       })
-      .catch(() => setError('Failed to load currencies. Check your API key.'))
+      .catch((err) => {
+        const msg = err.response?.data?.error || 'Failed to load currencies. Check your API key.';
+        setError(msg);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -59,8 +62,9 @@ const CurrencyConverter: React.FC = () => {
         setRate(data.info?.rate ?? null);
         setLastUpdated(new Date().toLocaleTimeString());
       }
-    } catch {
-      setError('Conversion failed. Please try again.');
+    } catch (err: any) {
+      const msg = err.response?.data?.error || 'Conversion failed. Please try again.';
+      setError(msg);
     } finally {
       setConverting(false);
     }

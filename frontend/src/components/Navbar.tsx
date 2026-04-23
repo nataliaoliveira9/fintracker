@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <Link to="/" className="navbar-brand">
         <BarChart2 size={22} className="brand-icon" />
-        <span className="brand-name">Bolota<span className="brand-accent">Dev</span></span>
+        <span className="brand-name">Fin<span className="brand-accent">Tracker</span></span>
       </Link>
       <div className="navbar-links">
         <Link

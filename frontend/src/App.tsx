@@ -20,7 +20,7 @@ const App: React.FC = () => {
         </main>
         <footer className="app-footer">
           <span>Built with Django + React · </span>
-          <span className="footer-accent">BolotaDev Portfolio</span>
+          <span className="footer-accent"><a href="https://github.com/nataliaoliveira9">my portfolio</a></span>
         </footer>
       </div>
     </BrowserRouter>

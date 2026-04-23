@@ -63,7 +63,7 @@ const Home: React.FC = () => {
       <div className="tech-stack">
         <span className="tech-label">Built with</span>
         <div className="tech-pills">
-          {['Django', 'REST Framework', 'React', 'TypeScript', 'Lightweight Charts'].map(t => (
+          {['Django', 'REST Framework', 'APIs', 'React', 'TypeScript', 'Lightweight Charts'].map(t => (
             <span key={t} className="tech-pill">{t}</span>
           ))}
         </div>

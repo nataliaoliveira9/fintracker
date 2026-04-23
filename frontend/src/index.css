@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Stack+Sans+Headline:wght@200..700&display=swap');
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -23,7 +22,7 @@
   --green: #3fb950;
   --yellow: #d29922;
   --blue: #58a6ff;
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Stack Sans Headline', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   --radius: 8px;
   --radius-lg: 16px;
@@ -33,6 +32,7 @@
 
 html, body, #root {
   height: 100%;
+  scrollbar-color: var(--accent) var(--bg-1);
 }
 
 body {
