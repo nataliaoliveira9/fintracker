@@ -99,43 +99,65 @@ const StockViewer: React.FC = () => {
   }, []);
 
   const loadChart = useCallback(async () => {
-    if (!candleSeriesRef.current || !volSeriesRef.current) return;
-    setLoadingChart(true);
-    setError('');
-    try {
-      const res = await stockApi.candles(symbol, interval.value, interval.size);
-      const data = res.data;
-      if (data.status === 'error') {
-        setError(data.message || 'Failed to load chart data');
-        return;
-      }
-      const bars: CandlestickBar[] = [...(data.values || [])].reverse();
+  if (!candleSeriesRef.current || !volSeriesRef.current) return;
+  
+  setLoadingChart(true);
+  setError('');
 
-      const candles = bars.map(b => ({
-        time: b.datetime.split(' ')[0] as any,
+  try {
+    const res = await stockApi.candles(symbol, interval.value, interval.size);
+    const data = res.data;
+
+    // 1. Twelve Data specific error check (even with 200 OK)
+    if (data.status === 'error' || !data.values) {
+      setError(data.message || 'No data found for this symbol.');
+      return;
+    }
+
+    // 2. Map and Parse (Convert Strings to Numbers & Timestamps)
+    // We reverse() because Lightweight Charts needs oldest -> newest
+    const bars: CandlestickBar[] = [...data.values].reverse();
+
+    const candles = bars.map(b => {
+      // Use Unix timestamp (seconds) to avoid duplicate "Date" errors on intraday charts
+      const timestamp = Math.floor(new Date(b.datetime).getTime() / 1000);
+      
+      return {
+        time: timestamp as any,
         open: parseFloat(b.open),
         high: parseFloat(b.high),
         low: parseFloat(b.low),
         close: parseFloat(b.close),
-      }));
+      };
+    });
 
-      const volumes = bars.map(b => ({
-        time: b.datetime.split(' ')[0] as any,
+    const volumes = bars.map(b => {
+      const timestamp = Math.floor(new Date(b.datetime).getTime() / 1000);
+      const isUp = parseFloat(b.close) >= parseFloat(b.open);
+      
+      return {
+        time: timestamp as any,
         value: parseFloat(b.volume),
-        color: parseFloat(b.close) >= parseFloat(b.open)
-          ? 'rgba(63,185,80,0.3)'
-          : 'rgba(248,81,73,0.3)',
-      }));
+        color: isUp ? 'rgba(63,185,80,0.5)' : 'rgba(248,81,73,0.5)',
+      };
+    });
 
+    // 3. Final validation before setting data
+    if (candles.length > 0) {
       candleSeriesRef.current.setData(candles);
       volSeriesRef.current.setData(volumes);
       chartRef.current?.timeScale().fitContent();
-    } catch {
-      setError('Failed to fetch chart data. Check your API key or symbol.');
-    } finally {
-      setLoadingChart(false);
+    } else {
+      setError('Market might be closed or data is unavailable.');
     }
-  }, [symbol, interval]);
+
+  } catch (err: any) {
+    console.error("Detailed Chart Error:", err);
+    setError('Failed to fetch data. Check connection or API limit.');
+  } finally {
+    setLoadingChart(false);
+  }
+}, [symbol, interval]);
 
   const loadQuote = useCallback(async () => {
     setLoadingQuote(true);
