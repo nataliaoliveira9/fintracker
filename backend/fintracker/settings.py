@@ -139,7 +139,7 @@ REST_FRAMEWORK = {
 # Cache - use the database for persistent caching of API results (saves API quota)
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         # 'LOCATION': 'api_cache_table',
     }
 }
