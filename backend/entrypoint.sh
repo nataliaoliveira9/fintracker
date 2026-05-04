@@ -3,12 +3,6 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-echo "Applying database migrations..."
-python manage.py migrate --noinput
-
-echo "Creating cache table..."
-python manage.py createcachetable --noinput
-
 # Render provides the PORT environment variable
 PORT="${PORT:-8000}"
 
