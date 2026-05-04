@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project
 COPY . .
 
+# Collect static files for WhiteNoise (dummy key used only at build time)
+RUN DJANGO_SECRET_KEY=build-time-placeholder python manage.py collectstatic --noinput
+
 # Standard Django port
 EXPOSE 8000
 
