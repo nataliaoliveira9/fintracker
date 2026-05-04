@@ -140,6 +140,6 @@ REST_FRAMEWORK = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'api_cache_table',
+        # 'LOCATION': 'api_cache_table',
     }
 }

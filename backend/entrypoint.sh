@@ -9,6 +9,6 @@ PORT="${PORT:-8000}"
 echo "Starting Gunicorn on port $PORT..."
 exec gunicorn fintracker.wsgi:application \
     --bind "0.0.0.0:$PORT" \
-    --workers 3 \
+    --workers 1 \
     --access-logfile - \
     --error-logfile -
