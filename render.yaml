@@ -5,20 +5,20 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    healthCheckPath: /api/stocks/search/?q=AAPL
+    healthCheckPath: /admin/
     envVars:
       - key: DJANGO_SECRET_KEY
-        sync: false          # set manually in Render dashboard
+        sync: false # set manually in Render dashboard
       - key: TWELVEDATA_API_KEY
-        sync: false          # set manually in Render dashboard
+        sync: false # set manually in Render dashboard
       - key: APPDATA_API_KEY
-        sync: false          # set manually in Render dashboard
+        sync: false # set manually in Render dashboard
       - key: DEBUG
         value: "False"
       - key: DJANGO_ALLOWED_HOSTS
-        value: "fintracker-backend.onrender.com"
+        value: "fintracker-backend.onrender.com,.onrender.com"
       - key: CORS_ALLOWED_ORIGINS
-        value: "https://fintracker-frontend.onrender.com"
+        value: "https://fintracker-frontend.onrender.com,http://localhost:5173"
 
   # ── React / Vite Static Site ─────────────────────────────────────────────────
   - type: web
@@ -30,7 +30,7 @@ services:
     routes:
       - type: rewrite
         source: /*
-        destination: /index.html   # SPA fallback for react-router
+        destination: /index.html # SPA fallback for react-router
     envVars:
       - key: VITE_API_URL
         value: "https://fintracker-backend.onrender.com/api"

@@ -17,7 +17,12 @@ COPY . .
 # Collect static files for WhiteNoise (dummy key used only at build time)
 RUN DJANGO_SECRET_KEY=build-time-placeholder python manage.py collectstatic --noinput
 
-# Standard Django port
+# Copy entrypoint script and make sure it has the right permissions
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Render provides the port via $PORT
 EXPOSE 8000
 
-CMD ["gunicorn", "fintracker.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+# Use the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
